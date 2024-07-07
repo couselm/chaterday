@@ -13,11 +13,7 @@ interface ChatLayoutProps {
   navCollapsedSize: number
 }
 
-export function ChatLayout({
-  defaultLayout = [320, 480],
-  defaultCollapsed = false,
-  navCollapsedSize,
-}: ChatLayoutProps) {
+export function ChatLayout({ defaultLayout = [320, 480], defaultCollapsed = true, navCollapsedSize }: ChatLayoutProps) {
   const [isCollapsed, setIsCollapsed] = React.useState(defaultCollapsed)
   const [selectedUser, setSelectedUser] = React.useState(userData[0])
   const [isMobile, setIsMobile] = useState(false)
@@ -40,44 +36,46 @@ export function ChatLayout({
   }, [])
 
   return (
-    <ResizablePanelGroup
-      direction="horizontal"
-      onLayout={(sizes: number[]) => {
-        document.cookie = `react-resizable-panels:layout=${JSON.stringify(sizes)}`
-      }}
-      className="h-full items-stretch"
-    >
-      <ResizablePanel
-        defaultSize={defaultLayout[0]}
-        collapsedSize={navCollapsedSize}
-        collapsible={true}
-        minSize={isMobile ? 0 : 24}
-        maxSize={isMobile ? 8 : 30}
-        onCollapse={() => {
-          setIsCollapsed(true)
-          document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(true)}`
+    <div className="flex h-screen flex-col">
+      <ResizablePanelGroup
+        direction="horizontal"
+        onLayout={(sizes: number[]) => {
+          document.cookie = `react-resizable-panels:layout=${JSON.stringify(sizes)}`
         }}
-        onExpand={() => {
-          setIsCollapsed(false)
-          document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}`
-        }}
-        className={cn(isCollapsed && 'min-w-[50px] transition-all duration-300 ease-in-out md:min-w-[70px]')}
+        className="flex flex-1 overflow-hidden"
       >
-        <Sidebar
-          isCollapsed={isCollapsed || isMobile}
-          links={userData.map((user) => ({
-            name: user.name,
-            messages: user.messages ?? [],
-            avatar: user.avatar,
-            variant: selectedUser.name === user.name ? 'grey' : 'ghost',
-          }))}
-          isMobile={isMobile}
-        />
-      </ResizablePanel>
-      <ResizableHandle withHandle />
-      <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-        <Chat messages={selectedUser.messages} selectedUser={selectedUser} isMobile={isMobile} />
-      </ResizablePanel>
-    </ResizablePanelGroup>
+        <ResizablePanel
+          defaultSize={defaultLayout[0]}
+          collapsedSize={navCollapsedSize}
+          collapsible={true}
+          minSize={isMobile ? 0 : 24}
+          maxSize={isMobile ? 8 : 30}
+          onCollapse={() => {
+            setIsCollapsed(true)
+            document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(true)}`
+          }}
+          onExpand={() => {
+            setIsCollapsed(false)
+            document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}`
+          }}
+          className={cn(isCollapsed && 'min-w-[50px] transition-all duration-300 ease-in-out md:min-w-[70px]')}
+        >
+          <Sidebar
+            isCollapsed={isCollapsed || isMobile}
+            links={userData.map((user) => ({
+              name: user.name,
+              messages: user.messages ?? [],
+              avatar: user.avatar,
+              variant: selectedUser.name === user.name ? 'grey' : 'ghost',
+            }))}
+            isMobile={isMobile}
+          />
+        </ResizablePanel>
+        <ResizableHandle withHandle />
+        <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
+          <Chat messages={selectedUser.messages} selectedUser={selectedUser} isMobile={isMobile} />
+        </ResizablePanel>
+      </ResizablePanelGroup>
+    </div>
   )
 }

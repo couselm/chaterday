@@ -33,7 +33,7 @@ const LanguageSelector = () => {
     <div className="flex items-end">
       <Popover>
         <PopoverTrigger>
-          <div className="flex items-center gap-1 fill-black text-black">
+          <div className="flex items-center gap-1 fill-foreground text-foreground">
             <Languages size={18} />
             {currentLanguage && getLocaleDisplayName(currentLanguage)}
             <ChevronDown size={12} />

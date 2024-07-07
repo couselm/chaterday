@@ -22,6 +22,12 @@ export default function ChatBottombar({ sendMessage, isMobile }: ChatBottombarPr
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setMessage(event.target.value)
+
+    // Adjust the height of the textarea
+    if (inputRef.current) {
+      inputRef.current.style.height = 'auto'
+      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`
+    }
   }
 
   const handleThumbsUp = () => {
@@ -48,6 +54,7 @@ export default function ChatBottombar({ sendMessage, isMobile }: ChatBottombarPr
 
       if (inputRef.current) {
         inputRef.current.focus()
+        inputRef.current.style.height = 'auto' // Reset height after sending the message
       }
     }
   }
@@ -56,11 +63,6 @@ export default function ChatBottombar({ sendMessage, isMobile }: ChatBottombarPr
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault()
       handleSend()
-    }
-
-    if (event.key === 'Enter' && event.shiftKey) {
-      event.preventDefault()
-      setMessage((prev) => prev + '\n')
     }
   }
 
@@ -164,9 +166,10 @@ export default function ChatBottombar({ sendMessage, isMobile }: ChatBottombarPr
             onChange={handleInputChange}
             name="message"
             placeholder="Aa"
-            className=" flex h-9 w-full resize-none items-center overflow-hidden rounded-full border bg-background"
+            rows={1}
+            className="auto-resize flex w-full resize-none overflow-y-auto rounded-lg border bg-background"
           ></Textarea>
-          <div className="absolute bottom-0.5 right-2  ">
+          <div className="absolute bottom-0.5 right-2">
             <EmojiPicker
               onChange={(value) => {
                 setMessage(message + value)

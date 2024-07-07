@@ -4,6 +4,7 @@
 
 @layer base {
   :root {
+    // hue, saturation, and lightness
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -57,4 +58,11 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.auto-resize {
+  resize: none;
+  overflow: hidden;
+  min-height: 2.5rem; /* Adjust based on the desired initial height */
+  max-height: 10rem; /* Adjust based on the maximum height you want */
 }
