@@ -8,9 +8,8 @@ import { LanguageSelector } from '../language-selector'
 
 export default function Component() {
   const navLinks = [
-    { name: 'Get Started', href: '/get-started' },
-    { name: 'Chat', href: '/chat' },
-    { name: 'Profile', href: '/profile' },
+    { name: 'Chat', href: '/' },
+    { name: 'Profile', href: '/settings' },
   ]
 
   return (
@@ -24,8 +23,7 @@ export default function Component() {
         </SheetTrigger>
         <SheetContent side="left">
           <Link to="/" prefetch={false}>
-            <ShirtIcon className="h-6 w-6" />
-            <span className="sr-only">ShadCN</span>
+            <img src="assets/logo.png" alt="Chaterday Logo" className="h-10 w-10" />
           </Link>
           <div className="grid gap-6 py-6">
             {navLinks.map((link) => (
@@ -37,8 +35,7 @@ export default function Component() {
         </SheetContent>
       </Sheet>
       <Link to="/" className="mr-6 hidden lg:flex" prefetch={false}>
-        <ShirtIcon className="h-6 w-6" />
-        <span className="sr-only">ShadCN</span>
+        <img src="assets/logo.png" alt="Chaterday Logo" className="h-10 w-10" />
       </Link>
       <NavigationMenu className="hidden lg:flex">
         <NavigationMenuList>
@@ -84,25 +81,6 @@ function MenuIcon(props) {
       <line x1="4" x2="20" y1="12" y2="12" />
       <line x1="4" x2="20" y1="6" y2="6" />
       <line x1="4" x2="20" y1="18" y2="18" />
-    </svg>
-  )
-}
-
-function ShirtIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z" />
     </svg>
   )
 }

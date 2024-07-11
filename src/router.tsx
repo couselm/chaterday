@@ -5,6 +5,7 @@ import HomePage from './pages'
 import SignInPage from './pages/sign-in'
 import SignUpPage from './pages/sign-up'
 import ErrorPage from './components/error-page'
+import SettingsLayout from './components/userDashboard/settingsLayout'
 
 export const routerObjects: RouteObject[] = [
   {
@@ -18,6 +19,10 @@ export const routerObjects: RouteObject[] = [
   {
     path: '/sign-up',
     Component: SignUpPage,
+  },
+  {
+    path: '/settings',
+    Component: SettingsLayout,
   },
 ]
 
