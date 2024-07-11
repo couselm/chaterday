@@ -1,26 +1,18 @@
-'use client'
-
-import { Link } from 'react-router-dom'
 import { MoreHorizontal, PenSquare } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import { buttonVariants } from '../ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '../ui/tooltip'
 import { Avatar, AvatarImage } from '../ui/avatar'
-import { Message } from '../../data/UserData'
 
 interface SidebarProps {
   isCollapsed: boolean
-  links: {
-    name: string
-    messages: Message[]
-    avatar: string
-    variant: 'grey' | 'ghost'
-  }[]
-  onClick?: () => void
+  chats: Chat[]
+  selectedChat: Chat
+  setSelectedChat: (chat: Chat) => void
   isMobile: boolean
 }
 
-export function Sidebar({ links, isCollapsed, isMobile }: SidebarProps) {
+export function Sidebar({ chats, isCollapsed, selectedChat, setSelectedChat, isMobile }: SidebarProps) {
   return (
     <div
       data-collapsed={isCollapsed}
@@ -30,70 +22,75 @@ export function Sidebar({ links, isCollapsed, isMobile }: SidebarProps) {
         <div className="flex items-center justify-between p-2">
           <div className="flex items-center gap-2 text-2xl">
             <p className="font-medium">Chats</p>
-            <span className="text-zinc-300">({links.length})</span>
+            <span className="text-zinc-300">({chats.length})</span>
           </div>
 
-          <div>
-            <Link to="#" className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9')}>
+          <div className="flex items-center gap-2">
+            <div className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9')}>
               <MoreHorizontal size={20} />
-            </Link>
+            </div>
 
-            <Link to="#" className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9')}>
+            <div className={cn(buttonVariants({ variant: 'ghost', size: 'icon' }), 'h-9 w-9')}>
               <PenSquare size={20} />
-            </Link>
+            </div>
           </div>
         </div>
       )}
-      <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-        {links.map((link, index) =>
+      <nav className="grid gap-4 p-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
+        {chats.map((chat) =>
           isCollapsed ? (
-            <TooltipProvider key={index}>
-              <Tooltip key={index} delayDuration={0}>
+            <TooltipProvider key={chat.id}>
+              <Tooltip key={chat.id} delayDuration={0}>
                 <TooltipTrigger asChild>
-                  <Link
-                    to="#"
+                  <div
+                    onClick={() => setSelectedChat(chat)}
                     className={cn(
-                      buttonVariants({ variant: link.variant, size: 'icon' }),
-                      'h-11 w-11 md:h-16 md:w-16',
-                      link.variant === 'grey' &&
-                        'dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white',
+                      'flex h-11 w-11 cursor-pointer items-center justify-center rounded-xl md:h-16 md:w-16', // Flex utilities for centering
+                      chat.id === selectedChat.id && 'bg-gray-200 dark:bg-gray-700',
                     )}
                   >
                     <Avatar className="flex items-center justify-center">
-                      <AvatarImage src={link.avatar} alt={link.avatar} width={6} height={6} className="h-10 w-10 " />
-                    </Avatar>{' '}
-                    <span className="sr-only">{link.name}</span>
-                  </Link>
+                      <AvatarImage
+                        src={chat.users[0].avatar}
+                        alt={chat.users[0].avatar}
+                        width={6}
+                        height={6}
+                        className="h-10 w-10"
+                      />
+                    </Avatar>
+                    <span className="sr-only">{chat.users[0].name}</span>
+                  </div>
                 </TooltipTrigger>
                 <TooltipContent side="right" className="flex items-center gap-4">
-                  {link.name}
+                  {chat.users[0].name}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           ) : (
-            <Link
-              key={index}
-              href="#"
-              className={cn(
-                buttonVariants({ variant: link.variant, size: 'xl' }),
-                link.variant === 'grey' &&
-                  'shrink dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white',
-                'justify-start gap-4',
-              )}
+            <div
+              key={chat.id}
+              onClick={() => setSelectedChat(chat)}
+              className={`flex cursor-pointer flex-row justify-start gap-4 rounded-xl px-4 duration-300
+                ${chat.id === selectedChat.id ? 'bg-gray-200 py-8 dark:bg-gray-700' : 'py-4'}`}
             >
               <Avatar className="flex items-center justify-center">
-                <AvatarImage src={link.avatar} alt={link.avatar} width={6} height={6} className="h-10 w-10 " />
+                <AvatarImage
+                  src={chat.users[0].avatar}
+                  alt={chat.users[0].avatar}
+                  width={6}
+                  height={6}
+                  className="h-10 w-10"
+                />
               </Avatar>
               <div className="max-w-28 flex flex-col">
-                <span>{link.name}</span>
-                {link.messages.length > 0 && (
-                  <span className="truncate text-xs text-zinc-300 ">
-                    {link.messages[link.messages.length - 1].name.split(' ')[0]}:{' '}
-                    {link.messages[link.messages.length - 1].message}
+                <span>{chat.users[0].name}</span>
+                {chat.messages.length > 0 && (
+                  <span className="truncate text-xs text-zinc-300">
+                    {chat.messages[chat.messages.length - 1]?.message}
                   </span>
                 )}
               </div>
-            </Link>
+            </div>
           ),
         )}
       </nav>

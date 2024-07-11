@@ -1,10 +1,10 @@
 import React from 'react'
 import { createHashRouter, RouteObject } from 'react-router-dom'
-import ErrorPage from './components/error-page'
-import { getDefaultLayout } from './components/layout'
+import { getDefaultLayout } from './components'
 import HomePage from './pages'
 import SignInPage from './pages/sign-in'
 import SignUpPage from './pages/sign-up'
+import ErrorPage from './components/error-page'
 
 export const routerObjects: RouteObject[] = [
   {

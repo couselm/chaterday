@@ -6,7 +6,7 @@ export interface Chat {
 
 export interface Message {
   id: number
-  user: user
+  user: User
   message: string
   time: string
 }

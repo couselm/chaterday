@@ -1,4 +1,4 @@
-import { Message, UserData } from '../../data/UserData'
+import { Message, UserData } from '../../types/types'
 import { cn } from '../../lib/utils'
 import React, { useRef } from 'react'
 import { Avatar, AvatarImage } from '../ui/avatar'
@@ -14,12 +14,6 @@ interface ChatListProps {
 
 export function ChatList({ messages, selectedUser, sendMessage, isMobile }: ChatListProps) {
   const messagesContainerRef = useRef<HTMLDivElement>(null)
-
-  React.useEffect(() => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight
-    }
-  }, [messages])
 
   return (
     <div className="flex h-full w-full flex-col overflow-y-auto overflow-x-hidden">
@@ -46,19 +40,19 @@ export function ChatList({ messages, selectedUser, sendMessage, isMobile }: Chat
               }}
               className={cn(
                 'flex flex-col gap-2 whitespace-pre-wrap p-4',
-                message.name !== selectedUser.name ? 'items-end' : 'items-start',
+                message.user.name !== selectedUser.name ? 'items-end' : 'items-start',
               )}
             >
               <div className="flex items-center gap-3">
-                {message.name === selectedUser.name && (
+                {message.user.name === selectedUser.name && (
                   <Avatar className="flex items-center justify-center">
-                    <AvatarImage src={message.avatar} alt={message.name} width={6} height={6} />
+                    <AvatarImage src={message.user.avatar} alt={message.user.name} width={6} height={6} />
                   </Avatar>
                 )}
                 <span className=" max-w-xs rounded-md bg-accent p-3">{message.message}</span>
-                {message.name !== selectedUser.name && (
+                {message.user.name !== selectedUser.name && (
                   <Avatar className="flex items-center justify-center">
-                    <AvatarImage src={message.avatar} alt={message.name} width={6} height={6} />
+                    <AvatarImage src={message.user.avatar} alt={message.user.name} width={6} height={6} />
                   </Avatar>
                 )}
               </div>

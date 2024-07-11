@@ -4,10 +4,11 @@ import React, { useRef, useState } from 'react'
 import { buttonVariants } from '../ui/button'
 import { cn } from '../../lib/utils'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Message, loggedInUserData } from '../../data/UserData'
+import { Message } from '../../types'
 import { Textarea } from '../ui/textarea'
 import { EmojiPicker } from './EmojiPicker'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import { loggedInUser } from 'src/data/UserData'
 
 interface ChatBottombarProps {
   sendMessage: (newMessage: Message) => void
@@ -33,8 +34,8 @@ export default function ChatBottombar({ sendMessage, isMobile }: ChatBottombarPr
   const handleThumbsUp = () => {
     const newMessage: Message = {
       id: message.length + 1,
-      name: loggedInUserData.name,
-      avatar: loggedInUserData.avatar,
+      name: loggedInUser.name,
+      avatar: loggedInUser.avatar,
       message: '👍',
     }
     sendMessage(newMessage)
@@ -45,9 +46,9 @@ export default function ChatBottombar({ sendMessage, isMobile }: ChatBottombarPr
     if (message.trim()) {
       const newMessage: Message = {
         id: message.length + 1,
-        name: loggedInUserData.name,
-        avatar: loggedInUserData.avatar,
+        user: loggedInUser,
         message: message.trim(),
+        time: new Date().toLocaleTimeString(),
       }
       sendMessage(newMessage)
       setMessage('')
